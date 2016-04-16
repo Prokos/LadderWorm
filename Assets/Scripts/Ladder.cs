@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Ladder : MonoBehaviour {
 	public int startLength;
@@ -20,7 +21,8 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public void ExertForce(Vector2 force) {
-		body.AddForceAtPosition (Vector2.one * Time.deltaTime * force.x * GetBounds().size.y, new Vector2(0, GetBounds ().size.y));
+		List<GameObject> segments = GetSegments ();
+		body.AddForceAtPosition (Vector2.one * force.x * GetHeight(), segments.Last().transform.position);
 	}
 
 	public void AddSegment(){
@@ -44,8 +46,8 @@ public class Ladder : MonoBehaviour {
 		Bounds ladderBounds = GetBounds ();
 
 		boxCollider.size = new Vector2 (
-			ladderBounds.size.x,
-			ladderBounds.size.y
+			segmentRenderer.bounds.size.x,
+			GetHeight()
 		);
 
 		boxCollider.offset = new Vector2 (
