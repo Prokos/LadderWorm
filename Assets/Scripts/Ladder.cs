@@ -38,6 +38,10 @@ public class Ladder : MonoBehaviour {
 
 		segment.transform.parent = transform.FindChild ("Segments");
 		segment.transform.localPosition = position;
+		segment.transform.localRotation = Quaternion.identity;
+
+		// Set camera follow target to latest segment, for now
+		Camera.main.GetComponent<SmoothCamera2D>().target = segment.transform;
 	}
 
 	List<GameObject> GetSegments(){
@@ -51,8 +55,16 @@ public class Ladder : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetKeyDown ("space")) {
+		if (Input.GetKey (KeyCode.UpArrow)) {
 			length++;
+		}
+
+		if (Input.GetKey (KeyCode.LeftArrow)) {
+			transform.Rotate(Vector3.forward * 10 * Time.deltaTime);
+		}
+
+		if (Input.GetKey (KeyCode.RightArrow)) {
+			transform.Rotate(Vector3.back * 10 * Time.deltaTime);
 		}
 
 		BuildLadder ();
