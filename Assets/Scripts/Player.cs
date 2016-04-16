@@ -47,12 +47,12 @@ public class Player : MonoBehaviour {
 		//apply the verticalMovement
 		m_RigidBody2D.AddRelativeForce(new Vector2(movement.x * maxForce.x, movement.y * maxForce.y));
 		m_RigidBody2D.velocity = new Vector2(
-			Mathf.Min(m_RigidBody2D.velocity.x, maxSpeed.x),
-			Mathf.Min(m_RigidBody2D.velocity.y, maxSpeed.y)
+			Mathf.Clamp(m_RigidBody2D.velocity.x, -maxSpeed.x, maxSpeed.x),
+			Mathf.Clamp(m_RigidBody2D.velocity.y, -maxSpeed.y, maxSpeed.y)
 		);
 	}
 
-	private void CalculateCurrentState() {
+	private void CalculateCurrentLadderIndex() {
 		//do we need to change ladderPosition
 		if ( //center
 			ladderPositionStateIndex != 1 &&
@@ -60,21 +60,16 @@ public class Player : MonoBehaviour {
 			transform.localPosition.x > ladderBounds.min.x
 		) {
 			ladderPositionStateIndex = 1;
-
 		} else if ( //left
 			ladderPositionStateIndex != 0 &&
 			transform.localPosition.x < ladderBounds.min.x
 		) {
-			if (ladderPositionStateIndex < 2) {
-				ladderPositionStateIndex = 0;
-			}
+			ladderPositionStateIndex = 0;
 		} else if (//right
 			ladderPositionStateIndex != 2 &&
 			transform.localPosition.x > ladderBounds.max.x
 		) { 
-			if (ladderPositionStateIndex > 0) {
-				ladderPositionStateIndex = 2;
-			}
+			ladderPositionStateIndex = 2;
 		}
 
 		//TODO: animations based on ladderPositionState
@@ -119,7 +114,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		Vector2 movement = Vector2.zero;
 		bool falling = false;
 
@@ -137,20 +132,13 @@ public class Player : MonoBehaviour {
 		if (Input.GetKey (KeyCode.RightArrow)) {
 			movement += Vector2.right;
 		}
-
-		if (
-			Input.GetKeyDown (KeyCode.LeftArrow) ||
-			Input.GetKeyDown (KeyCode.RightArrow)
-		) {
-			Debug.Log (ladderPositionStateIndex);
-		}
-
-		CalculateCurrentState ();
-
-
+			
+		//very important
 		if (Input.GetKey (KeyCode.Space)) {
 			falling = true;
 		}
+
+		CalculateCurrentLadderIndex ();
 
 		Move (movement, falling);
 
