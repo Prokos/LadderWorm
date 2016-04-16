@@ -6,10 +6,12 @@ public class Ladder : MonoBehaviour {
 	public int startLength;
 	public GameObject segmentPrefab;
 	public float angle;
+	public float currentTorque = 0;
+	public float maxTorque     = 10f;
+	public SpriteRenderer segmentRenderer;
 
 	private int length;
 	private Rigidbody2D body;
-	private SpriteRenderer segmentRenderer;
 
 	void Awake () {
 		length = startLength;
@@ -21,6 +23,9 @@ public class Ladder : MonoBehaviour {
 
 	public void ExertForce(float yPosition, float horizontalForce) {
 		//nothing yet
+		currentTorque = yPosition * horizontalForce;
+
+		//
 	}
 
 	void BuildLadder(){
@@ -35,7 +40,6 @@ public class Ladder : MonoBehaviour {
             	0,
 				segmentRenderer.bounds.size.y * (i + segments.Count)
 			);
-
 			AddSegment (segmentPosition);
 		}
 	}
@@ -62,7 +66,7 @@ public class Ladder : MonoBehaviour {
 		);
 
 		// Set camera follow target to latest segment, for now
-		Camera.main.GetComponent<SmoothCamera2D>().target = segment.transform;
+		// Camera.main.GetComponent<SmoothCamera2D>().target = segment.transform;
 	}
 
 	List<GameObject> GetSegments(){
@@ -89,14 +93,7 @@ public class Ladder : MonoBehaviour {
 		if (Input.GetKey (KeyCode.UpArrow)) {
 			length++;
 		}
-
-		if (Input.GetKey (KeyCode.LeftArrow)) {
-			body.AddTorque(10f * Time.deltaTime);
-		}
-
-		if (Input.GetKey (KeyCode.RightArrow)) {
-			body.AddTorque(-10f * Time.deltaTime);
-		}
+		body.AddTorque (currentTorque * Time.deltaTime);
 
 		BuildLadder ();
 	}

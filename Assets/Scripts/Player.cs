@@ -8,11 +8,11 @@ public class Player : MonoBehaviour {
 	private Rigidbody2D m_RigidBody2D;
 	private Ladder ladder;
 
-	private float verticalSpeed               = 10f;
+	private float verticalSpeed               = 30f;
 	private float horizontalMaxForce          = 10f;
 	//sorta enum and never used ;D
 	private string[] ladderPositionStates     = {"left", "center", "right"};
-	private float[] ladderHorizontalPositions = {-10f, 0f, 10f};
+	private float[] ladderHorizontalPositions = {-2f, 0f, 2f};
 	private int ladderPositionStateIndex      = 1; // default at center
 
 
@@ -30,17 +30,28 @@ public class Player : MonoBehaviour {
 		//apply the verticalMovement
 		m_RigidBody2D.velocity = new Vector2(0,verticalMovement * verticalSpeed);
 
+		//update the exertingForce
+		//are we on the same side as we are exerting force too
+		if(
+			horizontalMovement < 0 && ladderPositionStateIndex == 1 ||
+			horizontalMovement > 0 && ladderPositionStateIndex == 3
+		) {
+			ladder.ExertForce (transform.localPosition.y, horizontalMovement * horizontalMaxForce);
+		}
+	}
+
+	public void Reposition(float horizontalMovement) {
 		//do we need to change ladderPosition
-		if(horizontalMovement == 0) {//no
+		if (horizontalMovement == 0) {//no
 
 		} else if (horizontalMovement > 0) {
-			if(ladderPositionStateIndex < 2)  {
+			if (ladderPositionStateIndex < 2) {
 				ladderPositionStateIndex++;
 
 				//optional animate to state
 			}
 		} else if (horizontalMovement < 0) {
-			if(ladderPositionStateIndex > 0) {
+			if (ladderPositionStateIndex > 0) {
 				ladderPositionStateIndex--;
 
 				//optional animate to state
@@ -53,15 +64,6 @@ public class Player : MonoBehaviour {
 			ladderHorizontalPositions [ladderPositionStateIndex],
 			transform.localPosition.y
 		);
-
-		//update the exertingForce
-		//are we on the same side as we are exerting force too
-		if(
-			horizontalMovement < 0 && ladderPositionStateIndex == 1 ||
-			horizontalMovement > 0 && ladderPositionStateIndex == 3
-		) {
-			ladder.ExertForce (transform.localPosition.y, horizontalMovement * horizontalMaxForce);
-		}
 	}
 	
 	// Update is called once per frame
@@ -78,12 +80,15 @@ public class Player : MonoBehaviour {
 		}
 
 
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+		if (Input.GetKey (KeyCode.LeftArrow)) {
 			horizontalMovement--;
 		}
-
-		if (Input.GetKeyDown (KeyCode.RightArrow)) {
+		if (Input.GetKey (KeyCode.RightArrow)) {
 			horizontalMovement++;
+		}
+
+		if (Input.GetKeyDown (KeyCode.RightArrow) || Input.GetKeyDown (KeyCode.LeftArrow)) {
+			Reposition (horizontalMovement);
 		}
 
 		if (Input.GetKey (KeyCode.Space)) {
