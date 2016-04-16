@@ -23,8 +23,7 @@ public class Ladder : MonoBehaviour {
 
 	public void ExertForce(Vector2 position, Vector2 force) {
 		//nothing yet
-
-		//
+		body.AddForceAtPosition (Vector2.left * Time.deltaTime * force.x * position.y, new Vector2(0, GetBounds ().size.y));
 	}
 
 	void BuildLadder(){
@@ -63,9 +62,6 @@ public class Ladder : MonoBehaviour {
 			0f,
 			boxCollider.size.y * .5f - segmentRenderer.bounds.size.y * .5f
 		);
-
-		// Set camera follow target to latest segment, for now
-		 Camera.main.GetComponent<SmoothCamera2D>().target = segment.transform;
 	}
 
 	List<GameObject> GetSegments(){
@@ -78,7 +74,7 @@ public class Ladder : MonoBehaviour {
 		return children;
 	}
 
-	Bounds GetBounds(){
+	public Bounds GetBounds(){
 		Bounds bounds = new Bounds(transform.position, Vector2.zero);
 
 		foreach(Renderer r in GetComponentsInChildren<SpriteRenderer>()) {

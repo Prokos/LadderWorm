@@ -5,11 +5,13 @@ public class Player : MonoBehaviour {
 
 	public GameObject ladderObject;
 	public Vector2 exertingForce; 
+
 	private Rigidbody2D m_RigidBody2D;
 	private Ladder ladder;
+	private Bounds ladderBounds;
 
-	private Vector2 maxSpeed = new Vector2 (0, 30f);
-	private Vector2 maxForce = new Vector2(10f, 0);
+	private Vector2 maxSpeed = new Vector2 (15f, 30f);
+	private Vector2 maxForce = new Vector2(500f, 500f);
 	//sorta enum and never used ;D
 	private string[] ladderPositionStates     = {"left", "center", "right"};
 	private float[] ladderHorizontalPositions = {-2f, 0f, 2f};
@@ -19,17 +21,22 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		m_RigidBody2D = GetComponent<Rigidbody2D>();
-		ladder        = ladderObject.GetComponent<Ladder> ();
+		ladder        = ladderObject.GetComponent<Ladder>();
+		ladderBounds  = ladder.GetBounds ();
 	}
 
 	/**
 	 * 	verticalMovement, -1 or 0 or 1
 	 *  horizontalForce, -1 or 0 or 1
 	 */
-	public void Move (float verticalMovement, float horizontalMovement, bool falling) {
+	private void Move (float verticalMovement, float horizontalMovement, bool falling) {
 		//apply the verticalMovement
-		m_RigidBody2D.velocity = new Vector2(0,verticalMovement * maxSpeed.y);
-
+		m_RigidBody2D.AddRelativeForce(new Vector2(0,verticalMovement * maxForce.y));
+		m_RigidBody2D.velocity = new Vector2(
+			Mathf.Min(m_RigidBody2D.velocity.x, maxSpeed.x),
+			Mathf.Min(m_RigidBody2D.velocity.y, maxSpeed.y)
+		);
+		Debug.Log (m_RigidBody2D.velocity);
 		//update the exertingForce
 		//are we on the same side as we are exerting force too
 		if(
@@ -40,24 +47,24 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	public void Reposition(float horizontalMovement) {
+	private void PotentialReposition() {
 		//do we need to change ladderPosition
-		if (horizontalMovement == 0) {//no
-
-		} else if (horizontalMovement > 0) {
-			if (ladderPositionStateIndex < 2) {
-				ladderPositionStateIndex++;
-
-				//optional animate to state
-			}
-		} else if (horizontalMovement < 0) {
-			if (ladderPositionStateIndex > 0) {
-				ladderPositionStateIndex--;
-
-				//optional animate to state
-
-			}
-		}
+//		if () {//no
+//
+//		} else if () {
+//			if (ladderPositionStateIndex < 2) {
+//				ladderPositionStateIndex++;
+//
+//				//optional animate to state
+//			}
+//		} else if () {
+//			if (ladderPositionStateIndex > 0) {
+//				ladderPositionStateIndex--;
+//
+//				//optional animate to state
+//
+//			}
+//		}
 
 		//set the horizontal position of the character TODO: should be animated
 		transform.localPosition = new Vector2 (
@@ -86,10 +93,8 @@ public class Player : MonoBehaviour {
 		if (Input.GetKey (KeyCode.RightArrow)) {
 			horizontalMovement++;
 		}
-
-		if (Input.GetKeyDown (KeyCode.RightArrow) || Input.GetKeyDown (KeyCode.LeftArrow)) {
-			Reposition (horizontalMovement);
-		}
+			
+		PotentialReposition ();
 
 		if (Input.GetKey (KeyCode.Space)) {
 			falling = true;
