@@ -6,7 +6,7 @@ public class BirdEnemy : MonoBehaviour {
 
 	//the point from where the enemies move
 	//probably defaults to world but some enemies will have the ladder or player as a relative movement position
-	public Vector2      relativeMovementPosition;
+	public Vector3      relativeMovementPosition;
 //	public GameObject   enemyPrefab;
 //	public EnemyManager enemyManager;
 //
@@ -34,25 +34,24 @@ public class BirdEnemy : MonoBehaviour {
 	private int framesTillRemoved = 300;
 	private bool isRemoving = false;
 
-	private Player player;
 	public GameObject playerObject;
 
 	// Use this for initialization
 	void Start() {
-		player = playerObject.GetComponent<Player>();
 		DetermineRelativeMovementPosition();
 		DetermineSpawnPoint ();
 	}
 
 	public virtual void DetermineRelativeMovementPosition() {
-		relativeMovementPosition = playerObject.transform.position;
+		relativeMovementPosition = transform.TransformPoint (0,0,0);
 	}
 
 	public virtual void DetermineSpawnPoint() {
 		randomBehaviorIndex = Random.Range (0, spawnPointsRelativeToPlayer.Length);
-		transform.position = relativeMovement = new Vector2 (
+		transform.position = transform.TransformPoint (
 			playerObject.transform.position.x + spawnPointsRelativeToPlayer[randomBehaviorIndex].x,
-			playerObject.transform.position.y + spawnPointsRelativeToPlayer[randomBehaviorIndex].y
+			playerObject.transform.position.y + spawnPointsRelativeToPlayer[randomBehaviorIndex].y,
+			0
 		);
 	}
 
@@ -61,17 +60,17 @@ public class BirdEnemy : MonoBehaviour {
 	}
 
 	public virtual void Move() {
-		//basic forward movement
-//		transform.position = GetNextPosition();
+		//basic movement
+		transform.position = GetNextPosition();
 	}
 
-//	public virtual Vector2 GetNextPosition() {
-//		
-//		return relativeMovementPosition = new Vector2 (
-//			relativeMovementPosition.x + movements[randomBehaviorIndex].x * speed.x,
-//			relativeMovementPosition.y + movements[randomBehaviorIndex].y * speed.y
-//		);
-//	}
+	public virtual Vector2 GetNextPosition() {
+		
+		return relativeMovementPosition = new Vector2 (
+			transform.position.x + movements[randomBehaviorIndex].x * speed.x,
+			transform.position.y + movements[randomBehaviorIndex].y * speed.y
+		);
+	}
 
 	IEnumerator RemoveWithWait() {
 		yield return new WaitUntil(() => framesTillRemoved == 0);
@@ -92,7 +91,6 @@ public class BirdEnemy : MonoBehaviour {
 			
 			Destroy(gameObject);
 			Destroy (this);
-			player.HitByEnemy ();
 		}
 	}
 

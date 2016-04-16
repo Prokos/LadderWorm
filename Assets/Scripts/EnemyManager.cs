@@ -18,8 +18,6 @@ public class EnemyManager : MonoBehaviour
 
 	void Spawn ()
 	{
-		Debug.Log ("Hello?");
-
 		// Create an instance of the enemy prefab at the randomly selected spawn point's position and rotation.
 		GameObject tmpBirdEnemy = Instantiate (birdEnemyPrefab) as GameObject;
 		tmpBirdEnemy.GetComponent<BirdEnemy>().playerObject = playerObject;
