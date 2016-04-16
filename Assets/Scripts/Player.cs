@@ -8,8 +8,8 @@ public class Player : MonoBehaviour {
 	private Rigidbody2D m_RigidBody2D;
 	private Ladder ladder;
 
-	private float verticalSpeed               = 30f;
-	private float horizontalMaxForce          = 10f;
+	private Vector2 maxSpeed = new Vector2 (0, 30f);
+	private Vector2 maxForce = new Vector2(10f, 0);
 	//sorta enum and never used ;D
 	private string[] ladderPositionStates     = {"left", "center", "right"};
 	private float[] ladderHorizontalPositions = {-2f, 0f, 2f};
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour {
 	 */
 	public void Move (float verticalMovement, float horizontalMovement, bool falling) {
 		//apply the verticalMovement
-		m_RigidBody2D.velocity = new Vector2(0,verticalMovement * verticalSpeed);
+		m_RigidBody2D.velocity = new Vector2(0,verticalMovement * maxSpeed.y);
 
 		//update the exertingForce
 		//are we on the same side as we are exerting force too
@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
 			horizontalMovement < 0 && ladderPositionStateIndex == 1 ||
 			horizontalMovement > 0 && ladderPositionStateIndex == 3
 		) {
-			ladder.ExertForce (transform.localPosition, new Vector2(horizontalMaxForce * horizontalMovement, 0f));
+			ladder.ExertForce (transform.localPosition, new Vector2(maxForce.x * horizontalMovement, 0f));
 		}
 	}
 
