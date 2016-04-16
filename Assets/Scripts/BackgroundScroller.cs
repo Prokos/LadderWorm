@@ -5,8 +5,7 @@ using System.Collections.Generic;
 public class BackgroundScroller : MonoBehaviour {
 	public Vector2 scrollSpeed;
 	public Sprite sprite;
-
-	private int poolSize = 3; //We don't do this dynamically because we don't want to allocate memory during runtime
+	public int poolSize = 3; //We don't do this dynamically because we don't want to allocate memory during runtime
 
 	private Vector3 startPosition;
 	private List<GameObject> spritePool;
@@ -43,7 +42,7 @@ public class BackgroundScroller : MonoBehaviour {
 
 	void Update (){
 		transform.position = new Vector3 (
-			startPosition.x - Camera.main.transform.position.x * scrollSpeed.x,
+			startPosition.x + Camera.main.transform.position.x * scrollSpeed.x,
 			startPosition.y + Camera.main.transform.position.y * scrollSpeed.y,
 			startPosition.z
 		);
