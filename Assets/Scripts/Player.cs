@@ -9,20 +9,33 @@ public class Player : MonoBehaviour {
 	private Rigidbody2D m_RigidBody2D;
 	private Ladder ladder;
 	private Bounds ladderBounds;
+	private Bounds movementBounds;
 
-	private Vector2 maxSpeed = new Vector2 (15f, 30f);
-	private Vector2 maxForce = new Vector2(750f, 500f);
+	private Vector2 maxSpeed;
+	private Vector2 maxForce;
+
+	private Vector2 maxSpeedOffLadder = new Vector2 (30f,  0f);
+	private Vector2 maxForceOffLadder = new Vector2 (500f, 0f);
+	private Vector2 maxSpeedOnLadder  = new Vector2 (10f, 30f);
+	private Vector2 maxForceOnLadder  = new Vector2 (500f, 500f);
+
 	//sorta enum and never used ;D
 	private string[] ladderPositionStates     = {"left", "center", "right"};
 	private float[] ladderHorizontalPositions = {-2f, 0f, 2f};
 	private int ladderPositionStateIndex      = 1; // default at center
-
+	private int lastLadderPositionStateIndex  = 1; //default to default as last
 
 	// Use this for initialization
 	void Awake () {
-		m_RigidBody2D = GetComponent<Rigidbody2D>();
-		ladder        = ladderObject.GetComponent<Ladder>();
-		ladderBounds  = ladder.GetBounds ();
+		m_RigidBody2D  = GetComponent<Rigidbody2D>();
+		ladder         = ladderObject.GetComponent<Ladder>();
+		ladderBounds   = ladder.GetBounds ();
+		movementBounds = ladderBounds;
+
+		//we start with being on the ladder
+		maxSpeed = maxSpeedOnLadder;
+		maxForce = maxForceOnLadder;
+		movementBounds.size = Vector3.Scale(movementBounds.size, new Vector3 (1.5f, 0, 0));
 	}
 
 	/**
@@ -31,41 +44,66 @@ public class Player : MonoBehaviour {
 	 */
 	private void Move (Vector2 movement, bool falling) {
 		//apply the verticalMovement
-		m_RigidBody2D.AddRelativeForce(new Vector2(0,movement.y * maxForce.y));
+		m_RigidBody2D.AddRelativeForce(new Vector2(movement.x * maxForce.x, movement.y * maxForce.y));
 		m_RigidBody2D.velocity = new Vector2(
 			Mathf.Min(m_RigidBody2D.velocity.x, maxSpeed.x),
 			Mathf.Min(m_RigidBody2D.velocity.y, maxSpeed.y)
 		);
-
-		//update the exertingForce
-		//are we on the same side as we are exerting force too
-		ladder.ExertForce (new Vector2(maxForce.x * movement.x, 0f));
 	}
 
-	private void PotentialReposition() {
+	private void CalculateCurrentState() {
 		//do we need to change ladderPosition
-//		if () {//no
-//
-//		} else if () {
-//			if (ladderPositionStateIndex < 2) {
-//				ladderPositionStateIndex++;
-//
-//				//optional animate to state
-//			}
-//		} else if () {
-//			if (ladderPositionStateIndex > 0) {
-//				ladderPositionStateIndex--;
-//
-//				//optional animate to state
-//
-//			}
-//		}
+		if ( //center
+			ladderPositionStateIndex != 1 &&
+			transform.localPosition.x < ladderBounds.max.x &&
+			transform.localPosition.x > ladderBounds.min.x
+		) {
+			ladderPositionStateIndex = 1;
 
-		//set the horizontal position of the character TODO: should be animated
-		transform.localPosition = new Vector2 (
-			ladderHorizontalPositions [ladderPositionStateIndex],
-			transform.localPosition.y
-		);
+		} else if ( //left
+			ladderPositionStateIndex != 0 &&
+			transform.localPosition.x < ladderBounds.min.x
+		) {
+			if (ladderPositionStateIndex < 2) {
+				ladderPositionStateIndex = 0;
+			}
+		} else if (//right
+			ladderPositionStateIndex != 2 &&
+			transform.localPosition.x > ladderBounds.max.x
+		) { 
+			if (ladderPositionStateIndex > 0) {
+				ladderPositionStateIndex = 2;
+			}
+		}
+
+		//TODO: animations based on ladderPositionState
+	}
+
+	private void ApplyStateMaxValues() {
+		if (ladderPositionStateIndex != lastLadderPositionStateIndex) {
+			lastLadderPositionStateIndex = ladderPositionStateIndex;
+			if (ladderPositionStateIndex == 1) { // center
+				maxForce = maxForceOnLadder;
+				maxSpeed = maxSpeedOnLadder;
+			} else {
+				maxForce = maxForceOffLadder;
+				maxSpeed = maxSpeedOffLadder;
+			}
+		}
+	}
+
+	private void ApplyBoundLimits() {
+		if (transform.localPosition.x > movementBounds.max.x) {
+			transform.localPosition = new Vector2 (
+				movementBounds.max.x,
+				transform.localPosition.y
+			);
+		} else if (transform.localPosition.x < movementBounds.min.x) {
+			transform.localPosition = new Vector2 (
+				movementBounds.min.x,
+				transform.localPosition.y
+			);
+		}
 	}
 	
 	// Update is called once per frame
@@ -87,14 +125,23 @@ public class Player : MonoBehaviour {
 		if (Input.GetKey (KeyCode.RightArrow)) {
 			movement += Vector2.right;
 		}
-			
-		PotentialReposition ();
+
+		if (
+			Input.GetKeyDown (KeyCode.LeftArrow) ||
+			Input.GetKeyDown (KeyCode.RightArrow)
+		) {
+			Debug.Log (ladderPositionStateIndex);
+		}
+		CalculateCurrentState ();
+
 
 		if (Input.GetKey (KeyCode.Space)) {
 			falling = true;
 		}
 
 		Move (movement, falling);
+
+		ApplyBoundLimits ();
 
 		if (transform.localPosition.y > ladder.GetHeight ()) {
 			ladder.AddLength (1);
