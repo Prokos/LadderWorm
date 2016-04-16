@@ -2,14 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
 public class Ladder : MonoBehaviour {
 	public int startLength;
 	public GameObject segmentPrefab;
 	public SpriteRenderer segmentRenderer;
 	public float segmentMargin = 0f;
+	public Text countString;
 
 	private Rigidbody2D body;
+
+	private List<GameObject> segments = new List<GameObject> ();
 
 	void Awake () {
 		body = GetComponent<Rigidbody2D> ();
@@ -21,14 +25,13 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public void ExertForce(Vector2 force) {
-		List<GameObject> segments = GetSegments ();
-		body.AddForceAtPosition (Vector2.one * force.x * GetHeight(), segments.Last().transform.position);
+		body.AddForceAtPosition (Vector2.right * force.x * GetHeight(), segments.Last().transform.position);
 	}
 
-	public void AddSegment(){
-		// Determine next position
-		List<GameObject> segments = GetSegments();
 
+
+	public void AddSegment()
+	{
 		Vector2 segmentPosition = new Vector2 (
 			0,
 			(segmentRenderer.bounds.size.y + segmentMargin) * segments.Count
@@ -40,6 +43,8 @@ public class Ladder : MonoBehaviour {
 		segment.transform.parent = transform.FindChild ("Segments");
 		segment.transform.localPosition = segmentPosition;
 		segment.transform.localRotation = Quaternion.identity;
+
+		segments.Add (segment);
 
 		// Update BoxCollider
 		BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
@@ -54,17 +59,13 @@ public class Ladder : MonoBehaviour {
 			0f,
 			boxCollider.size.y * .5f - segmentRenderer.bounds.size.y * .5f
 		);
-	}
 
-	List<GameObject> GetSegments(){
-		List<GameObject> children = new List<GameObject>();
-		foreach (Transform child in transform.FindChild("Segments")){
-			if (child.tag == "LadderSegment"){
-				children.Add(child.gameObject);
-			}
+		segments.Add (segment);
+
+		// Score Counter
+		if(countString != null){
+			countString.text = "Ladders Built:  " + segments.Count;
 		}
-			
-		return children;
 	}
 
 	public Bounds GetBounds(){
@@ -78,7 +79,12 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public float GetHeight(){
-		return (segmentRenderer.bounds.size.y + segmentMargin) * GetSegments ().Count;
+		return (segmentRenderer.bounds.size.y + segmentMargin) * segments.Count;
+	}
+
+	public float GetHeightInWorldCoordinates() {
+		var topSegment = segments.Last ();
+		return topSegment.transform.position.y;
 	}
 		
 }
