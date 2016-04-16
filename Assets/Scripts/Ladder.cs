@@ -6,11 +6,9 @@ public class Ladder : MonoBehaviour {
 	public int startLength;
 	public GameObject segmentPrefab;
 
-	private Vector3 bottomPosition;
 	private int length;
 
 	void Awake () {
-		bottomPosition = transform.localPosition;
 		length = startLength;
 
 		BuildLadder ();
@@ -53,7 +51,9 @@ public class Ladder : MonoBehaviour {
 	}
 
 	void Update () {
-		length++;
+		if (Input.GetKeyDown ("space")) {
+			length++;
+		}
 
 		BuildLadder ();
 	}
