@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
 	private Bounds ladderBounds;
 
 	private Vector2 maxSpeed = new Vector2 (15f, 30f);
-	private Vector2 maxForce = new Vector2(750f, 500f);
+	private Vector2 maxForce = new Vector2(50f, 500f);
 	//sorta enum and never used ;D
 	private string[] ladderPositionStates     = {"left", "center", "right"};
 	private float[] ladderHorizontalPositions = {-2f, 0f, 2f};
