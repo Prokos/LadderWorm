@@ -22,8 +22,7 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public void ExertForce(Vector2 position, Vector2 force) {
-		//nothing yet
-		body.AddForceAtPosition (Vector2.left * Time.deltaTime * force.x * position.y, new Vector2(0, GetBounds ().size.y));
+		body.AddForceAtPosition (Vector2.left * Time.deltaTime * 10000f * GetBounds().size.y, new Vector2(0, GetBounds ().size.y));
 	}
 
 	void BuildLadder(){
@@ -94,18 +93,6 @@ public class Ladder : MonoBehaviour {
 	}
 
 	void Update () {
-		// currentTorque
-		//body.AddTorque (currentTorque * Time.deltaTime);
-
-
-		if (Input.GetKey (KeyCode.LeftArrow)) {
-			body.AddForceAtPosition (Vector2.left * Time.deltaTime * 10000f * GetBounds().size.y, new Vector2(0, GetBounds ().size.y));
-		}
-
-		if (Input.GetKey (KeyCode.RightArrow)) {
-			body.AddForceAtPosition (Vector2.right * Time.deltaTime * 10000f * GetBounds().size.y, new Vector2(0, GetBounds ().size.y));
-		}
-
 		BuildLadder ();
 	}
 }

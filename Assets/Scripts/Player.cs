@@ -29,9 +29,9 @@ public class Player : MonoBehaviour {
 	 * 	verticalMovement, -1 or 0 or 1
 	 *  horizontalForce, -1 or 0 or 1
 	 */
-	private void Move (float verticalMovement, float horizontalMovement, bool falling) {
+	private void Move (Vector2 movement, bool falling) {
 		//apply the verticalMovement
-		m_RigidBody2D.AddRelativeForce(new Vector2(0,verticalMovement * maxForce.y));
+		m_RigidBody2D.AddRelativeForce(new Vector2(0,movement.y * maxForce.y));
 		m_RigidBody2D.velocity = new Vector2(
 			Mathf.Min(m_RigidBody2D.velocity.x, maxSpeed.x),
 			Mathf.Min(m_RigidBody2D.velocity.y, maxSpeed.y)
@@ -40,10 +40,10 @@ public class Player : MonoBehaviour {
 		//update the exertingForce
 		//are we on the same side as we are exerting force too
 		if(
-			horizontalMovement < 0 && ladderPositionStateIndex == 1 ||
-			horizontalMovement > 0 && ladderPositionStateIndex == 3
+			movement.x < 0 && ladderPositionStateIndex == 1 ||
+			movement.y > 0 && ladderPositionStateIndex == 2
 		) {
-			ladder.ExertForce (transform.localPosition, new Vector2(maxForce.x * horizontalMovement, 0f));
+			ladder.ExertForce (transform.localPosition, new Vector2(maxForce.x * movement.x, 0f));
 		}
 	}
 
@@ -75,23 +75,22 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float verticalMovement = 0;
-		float horizontalMovement = 0;
+		Vector2 movement = Vector2.zero;
 		bool falling = false;
 
 		if (Input.GetKey (KeyCode.UpArrow)) {
-			verticalMovement++;
+			movement += Vector2.up;
 		}
 		if (Input.GetKey (KeyCode.DownArrow)) {
-			verticalMovement--;
+			movement += Vector2.down;
 		}
 
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			horizontalMovement--;
+			movement += Vector2.left;
 		}
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			horizontalMovement++;
+			movement += Vector2.right;
 		}
 			
 		PotentialReposition ();
@@ -100,7 +99,7 @@ public class Player : MonoBehaviour {
 			falling = true;
 		}
 
-		Move (verticalMovement, horizontalMovement, falling);
+		Move (movement, falling);
 
 		if (transform.localPosition.y > ladder.GetHeight ()) {
 			ladder.AddLength (1);
