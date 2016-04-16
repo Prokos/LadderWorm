@@ -107,11 +107,11 @@ public class BackgroundScroller : MonoBehaviour {
 			}
 		}
 
-		// Check if we need to move vertically
+		// Check if we need to move vertically (up)
 		List<GameObject> lastRow = spriteRows.Last();
 		if(lastRow.First().GetComponent<SpriteRenderer>().bounds.max.y < cameraBounds.max.y){
 			// Find the row to be moved, which depends on spritePool.y
-			List<GameObject> rowToBeMoved = spriteRows.ElementAt((int)(spriteRows.Count - poolSize.y));
+			List<GameObject> rowToBeMoved = spriteRows.ElementAt(spriteRows.Count - (int)poolSize.y);
 
 			foreach (GameObject sprite in rowToBeMoved) {
 				sprite.transform.localPosition = new Vector2 (
@@ -123,7 +123,26 @@ public class BackgroundScroller : MonoBehaviour {
 			// Re-add the row so it's now last in the list - beautiful
 			spriteRows.Remove(rowToBeMoved);
 			spriteRows.Add (rowToBeMoved);
+		}else{
+			// Check if we need to move vertically (down)
+			List<GameObject> firstRepeatRow = spriteRows.ElementAt(spriteRows.Count - (int)poolSize.y);
+			List<GameObject> lastNotRepeatRow = spriteRows.ElementAt (spriteRows.Count - (int)poolSize.y - 1);
+
+			if (firstRepeatRow.First ().GetComponent<SpriteRenderer> ().bounds.min.y > cameraBounds.min.y &&
+			   lastNotRepeatRow.First ().GetComponent<SpriteRenderer> ().bounds.max.y < cameraBounds.min.y) {
+				foreach (GameObject sprite in lastRow) {
+					sprite.transform.localPosition = new Vector2 (
+						sprite.transform.localPosition.x,
+						sprite.transform.localPosition.y - poolSize.y * sprite.GetComponent<SpriteRenderer>().bounds.size.y
+					);
+				}
+
+				// Re-add the row so it's now last in the list - beautiful
+				spriteRows.Remove(lastRow);
+				spriteRows.Insert(spriteRows.Count - (int)poolSize.y + 1, lastRow);
+			}
 		}
+
 	}
 				
 }
