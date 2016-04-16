@@ -23,8 +23,7 @@ public class Ladder : MonoBehaviour {
 
 	public void ExertForce(Vector2 position, Vector2 force) {
 		//nothing yet
-
-		//
+		body.AddForceAtPosition (Vector2.left * Time.deltaTime * force.x * position.y, new Vector2(0, GetBounds ().size.y));
 	}
 
 	void BuildLadder(){
