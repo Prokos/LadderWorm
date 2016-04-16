@@ -65,7 +65,7 @@ public class Ladder : MonoBehaviour {
 		);
 
 		// Set camera follow target to latest segment, for now
-		// Camera.main.GetComponent<SmoothCamera2D>().target = segment.transform;
+		 Camera.main.GetComponent<SmoothCamera2D>().target = segment.transform;
 	}
 
 	List<GameObject> GetSegments(){
@@ -98,16 +98,12 @@ public class Ladder : MonoBehaviour {
 
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			body.AddRelativeForce (Vector3.forward * 100f);
-//			body.AddForceAtPosition (Vector3.forward * Time.deltaTime * 100f, new Vector2(0, GetBounds ().size.y));
+			body.AddForceAtPosition (Vector2.left * Time.deltaTime * 10000f * GetBounds().size.y, new Vector2(0, GetBounds ().size.y));
 		}
 
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			body.AddRelativeForce (Vector3.back * 100f);
-
-//			body.AddForceAtPosition (Vector3.back * Time.deltaTime * 100f, new Vector2(0, GetBounds ().size.y));
+			body.AddForceAtPosition (Vector2.right * Time.deltaTime * 10000f * GetBounds().size.y, new Vector2(0, GetBounds ().size.y));
 		}
-
 
 		BuildLadder ();
 	}
