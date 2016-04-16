@@ -14,7 +14,7 @@ public class BackgroundScroller : MonoBehaviour {
 		transform.position = new Vector3 (
 			startPosition.x + Camera.main.transform.position.x * scrollSpeed.x,
 			startPosition.y + Camera.main.transform.position.y * scrollSpeed.y,
-			1
+			startPosition.z
 		);
 	}
 }
