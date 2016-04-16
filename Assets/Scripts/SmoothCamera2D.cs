@@ -16,6 +16,6 @@ public class SmoothCamera2D : MonoBehaviour {
 		transform.position = transform.position + new Vector3 (delta.x, delta.y, 0) * (1 - Mathf.Pow(followMultiplicative, Time.deltaTime));
 		//Vector3 destination = transform.position + delta;
 		//transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
-		Debug.Log(destination.y + " " + transform.position.y + " " + delta.y);
+//		Debug.Log(destination.y + " " + transform.position.y + " " + delta.y);
 	}
 }
