@@ -3,8 +3,7 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	public GameObject ladderObject;
-	public Vector2 exertingForce; 
+	public GameObject ladderObject; 
 
 	private Rigidbody2D m_RigidBody2D;
 	private Ladder ladder;
@@ -18,6 +17,8 @@ public class Player : MonoBehaviour {
 	private Vector2 maxForceOffLadder = new Vector2 (500f, 0f);
 	private Vector2 maxSpeedOnLadder  = new Vector2 (10f, 30f);
 	private Vector2 maxForceOnLadder  = new Vector2 (500f, 500f);
+
+	private float exertingForce           = 50f;
 
 	//sorta enum and never used ;D
 	private string[] ladderPositionStates     = {"left", "center", "right"};
@@ -105,6 +106,17 @@ public class Player : MonoBehaviour {
 			);
 		}
 	}
+
+	private void ApplyForceOnLadder(Vector2 movement) {
+		if (ladderPositionStateIndex == 1)
+			return;
+
+		if (ladderPositionStateIndex == 0 && movement.x < 0) {
+			ladder.ExertForce (new Vector2 (exertingForce * -1, 0));
+		} else if (ladderPositionStateIndex == 2 && movement.x > 0) {
+			ladder.ExertForce (new Vector2 (exertingForce, 0));
+		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -132,6 +144,7 @@ public class Player : MonoBehaviour {
 		) {
 			Debug.Log (ladderPositionStateIndex);
 		}
+
 		CalculateCurrentState ();
 
 
@@ -142,6 +155,8 @@ public class Player : MonoBehaviour {
 		Move (movement, falling);
 
 		ApplyBoundLimits ();
+
+		ApplyForceOnLadder (movement);
 
 		if (transform.localPosition.y > ladder.GetHeight ()) {
 			ladder.AddSegment ();
