@@ -6,7 +6,7 @@ public class Ladder : MonoBehaviour {
 	public int startLength;
 	public GameObject segmentPrefab;
 	public float angle;
-	public float currentTorque = 0;
+	public float Torque = 0;
 	public float maxTorque     = 10f;
 	public SpriteRenderer segmentRenderer;
 
@@ -21,9 +21,8 @@ public class Ladder : MonoBehaviour {
 		BuildLadder ();
 	}
 
-	public void ExertForce(float yPosition, float horizontalForce) {
+	public void ExertForce(Vector2 position, Vector2 force) {
 		//nothing yet
-		currentTorque = yPosition * horizontalForce;
 
 		//
 	}
@@ -93,7 +92,22 @@ public class Ladder : MonoBehaviour {
 		if (Input.GetKey (KeyCode.UpArrow)) {
 			length++;
 		}
-		body.AddTorque (currentTorque * Time.deltaTime);
+
+		// currentTorque
+		//body.AddTorque (currentTorque * Time.deltaTime);
+
+
+		if (Input.GetKey (KeyCode.LeftArrow)) {
+			body.AddRelativeForce (Vector3.forward * 100f);
+//			body.AddForceAtPosition (Vector3.forward * Time.deltaTime * 100f, new Vector2(0, GetBounds ().size.y));
+		}
+
+		if (Input.GetKey (KeyCode.RightArrow)) {
+			body.AddRelativeForce (Vector3.back * 100f);
+
+//			body.AddForceAtPosition (Vector3.back * Time.deltaTime * 100f, new Vector2(0, GetBounds ().size.y));
+		}
+
 
 		BuildLadder ();
 	}

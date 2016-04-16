@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
 			horizontalMovement < 0 && ladderPositionStateIndex == 1 ||
 			horizontalMovement > 0 && ladderPositionStateIndex == 3
 		) {
-			ladder.ExertForce (transform.localPosition.y, horizontalMovement * horizontalMaxForce);
+			ladder.ExertForce (transform.localPosition, new Vector2(horizontalMaxForce * horizontalMovement, 0f));
 		}
 	}
 
