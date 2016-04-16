@@ -20,9 +20,8 @@ public class PlayerMovement : MonoBehaviour {
 		anchorX.Start ();
 		anchorY.Start ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	void FixedUpdate() {
 		Vector2 movement = Vector2.zero;
 
 		if (Input.GetKey (KeyCode.UpArrow)) {
@@ -41,13 +40,13 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 		if (movement.x != 0) {
-			anchorX.Accerelate (Time.deltaTime, movement.x);
+			anchorX.Accerelate (Time.fixedDeltaTime, movement.x);
 		}
 		if (movement.y != 0) {
-			anchorY.Accerelate (Time.deltaTime, movement.y);
+			anchorY.Accerelate (Time.fixedDeltaTime, movement.y);
 		}
-		anchorX.DecelerateAndUpdate (Time.deltaTime);
-		anchorY.DecelerateAndUpdate (Time.deltaTime);
+		anchorX.DecelerateAndUpdate (Time.fixedDeltaTime);
+		anchorY.DecelerateAndUpdate (Time.fixedDeltaTime);
 
 		float newX = anchorX.value;	
 		float newY = anchorY.value;	
@@ -58,10 +57,6 @@ public class PlayerMovement : MonoBehaviour {
 			ladder.AddSegment ();
 		}
 
-	}
-
-	// To test.
-	void FixedUpdate() {
 		float percentageOffLadder = attachedJoint.connectedAnchor.x / anchorX.max;
 		if (Mathf.Abs (percentageOffLadder) <= forceDeadZonePercentage) {
 			percentageOffLadder = 0;
