@@ -5,10 +5,8 @@ using System.Collections.Generic;
 public class Ladder : MonoBehaviour {
 	public int startLength;
 	public GameObject segmentPrefab;
-	public float angle;
-	public float Torque = 0;
-	public float maxTorque     = 10f;
 	public SpriteRenderer segmentRenderer;
+	public float segmentMargin = 0f;
 
 	private Rigidbody2D body;
 
@@ -31,7 +29,7 @@ public class Ladder : MonoBehaviour {
 
 		Vector2 segmentPosition = new Vector2 (
 			0,
-			segmentRenderer.bounds.size.y * (segments.Count)
+			(segmentRenderer.bounds.size.y + segmentMargin) * segments.Count
 		);
 
 		// Create segment
@@ -78,7 +76,7 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public float GetHeight(){
-		return segmentRenderer.bounds.size.y * GetSegments ().Count;
+		return (segmentRenderer.bounds.size.y + segmentMargin) * GetSegments ().Count;
 	}
 		
 }
