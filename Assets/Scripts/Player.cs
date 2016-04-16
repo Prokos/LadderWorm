@@ -3,20 +3,23 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	public GameObject ladder;
+	public GameObject ladderObject;
 	public Vector2 exertingForce; 
+	private Rigidbody2D m_RigidBody2D;
+	private Ladder ladder;
 
 	private float verticalSpeed               = 10f;
 	private float horizontalMaxForce          = 10f;
+	//sorta enum and never used ;D
 	private string[] ladderPositionStates     = {"left", "center", "right"};
-	private float[] ladderHorizontalPositions = {-100f, 0f, 100f};
+	private float[] ladderHorizontalPositions = {-10f, 0f, 10f};
 	private int ladderPositionStateIndex      = 1; // default at center
 
-	private Rigidbody2D rigidBody2D;
 
 	// Use this for initialization
 	void Awake () {
-		rigidbody2D = GetComponent<Rigidbody2D>();
+		m_RigidBody2D = GetComponent<Rigidbody2D>();
+		ladder        = ladderObject.GetComponent<Ladder> ();
 	}
 
 	/**
@@ -24,10 +27,8 @@ public class Player : MonoBehaviour {
 	 *  horizontalForce, -1 or 0 or 1
 	 */
 	public void Move (float verticalMovement, float horizontalMovement, bool falling) {
-		float ladderRotation = ladder.transform.localRotation.z;
-
 		//apply the verticalMovement
-		rigidBody2D.velocity = new Vector2(0,verticalMovement * verticalSpeed);
+		m_RigidBody2D.velocity = new Vector2(0,verticalMovement * verticalSpeed);
 
 		//do we need to change ladderPosition
 		if(horizontalMovement == 0) {//no
@@ -65,8 +66,31 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+		float verticalMovement = 0;
+		float horizontalMovement = 0;
+		bool falling = false;
 
+		if (Input.GetKey (KeyCode.UpArrow)) {
+			verticalMovement++;
+		}
+		if (Input.GetKey (KeyCode.DownArrow)) {
+			verticalMovement--;
+		}
+
+
+		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+			horizontalMovement--;
+		}
+
+		if (Input.GetKeyDown (KeyCode.RightArrow)) {
+			horizontalMovement++;
+		}
+
+		if (Input.GetKey (KeyCode.Space)) {
+			falling = true;
+		}
+
+		Move (verticalMovement, horizontalMovement, falling);
+	}
 
 }
