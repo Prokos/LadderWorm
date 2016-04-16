@@ -11,6 +11,8 @@ public class Ladder : MonoBehaviour {
 
 	private Rigidbody2D body;
 
+	private List<GameObject> segments = new List<GameObject> ();
+
 	void Awake () {
 		body = GetComponent<Rigidbody2D> ();
 		segmentRenderer = segmentPrefab.transform.Find ("sprite").GetComponent<SpriteRenderer> ();
@@ -22,12 +24,13 @@ public class Ladder : MonoBehaviour {
 
 	public void ExertForce(Vector2 force) {
 		List<GameObject> segments = GetSegments ();
-		body.AddForceAtPosition (Vector2.one * force.x * GetHeight(), segments.Last().transform.position);
+		body.AddForceAtPosition (Vector2.right * force.x * GetHeight(), segments.Last().transform.position);
 	}
 
+
+
 	public void AddSegment(){
-		// Determine next position
-		List<GameObject> segments = GetSegments();
+		// Determine next position	
 
 		Vector2 segmentPosition = new Vector2 (
 			0,
@@ -40,6 +43,8 @@ public class Ladder : MonoBehaviour {
 		segment.transform.parent = transform.FindChild ("Segments");
 		segment.transform.localPosition = segmentPosition;
 		segment.transform.localRotation = Quaternion.identity;
+
+		segments.Add (segment);
 
 		// Update BoxCollider
 		BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
@@ -78,7 +83,12 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public float GetHeight(){
-		return (segmentRenderer.bounds.size.y + segmentMargin) * GetSegments ().Count;
+		return (segmentRenderer.bounds.size.y + segmentMargin) * segments.Count;
+	}
+
+	public float GetHeightInWorldCoordinates() {
+		var topSegment = segments.Last ();
+		return topSegment.transform.position.y;
 	}
 		
 }
