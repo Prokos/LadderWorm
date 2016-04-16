@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
 	public GameObject ladderObject; 
+	public Text countString;
 
 	private Rigidbody2D m_RigidBody2D;
 	private Ladder ladder;
 	private Bounds ladderBounds;
 	private Bounds movementBounds;
+	private int ladderCount;
 
 	private Vector2 maxSpeed;
 	private Vector2 maxForce;
@@ -37,6 +40,9 @@ public class Player : MonoBehaviour {
 		maxSpeed = maxSpeedOnLadder;
 		maxForce = maxForceOnLadder;
 		movementBounds.size = Vector3.Scale(movementBounds.size, new Vector3 (1.5f, 0, 0));
+	
+		ladderCount = 5;
+		UpdateLadderCounter ();
 	}
 
 	/**
@@ -148,7 +154,13 @@ public class Player : MonoBehaviour {
 
 		if (transform.localPosition.y > ladder.GetHeight ()) {
 			ladder.AddSegment ();
+			ladderCount = ladderCount + 1;
+			UpdateLadderCounter ();
 		}
 	}
 
+	// Score Counter
+	void UpdateLadderCounter() {
+		countString.text = "Ladders Built:  " + ladderCount.ToString ();
+	}
 }
