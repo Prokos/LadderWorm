@@ -91,11 +91,14 @@ public class Ladder : MonoBehaviour {
 		}
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			body.AddTorque(10f * Time.deltaTime);
+			body.AddRelativeForce (Vector3.forward * 100f);
+//			body.AddForceAtPosition (Vector3.forward * Time.deltaTime * 100f, new Vector2(0, GetBounds ().size.y));
 		}
 
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			body.AddTorque(-10f * Time.deltaTime);
+			body.AddRelativeForce (Vector3.back * 100f);
+
+//			body.AddForceAtPosition (Vector3.back * Time.deltaTime * 100f, new Vector2(0, GetBounds ().size.y));
 		}
 
 		BuildLadder ();
