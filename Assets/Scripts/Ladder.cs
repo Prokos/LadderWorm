@@ -5,51 +5,38 @@ using System.Collections.Generic;
 public class Ladder : MonoBehaviour {
 	public int startLength;
 	public GameObject segmentPrefab;
-	public float angle;
-	public float Torque = 0;
-	public float maxTorque     = 10f;
 	public SpriteRenderer segmentRenderer;
+	public float segmentMargin = 0f;
 
-	private int length;
 	private Rigidbody2D body;
 
 	void Awake () {
-		length = startLength;
 		body = GetComponent<Rigidbody2D> ();
 		segmentRenderer = segmentPrefab.transform.Find ("sprite").GetComponent<SpriteRenderer> ();
 
-		BuildLadder ();
+		for (var i = 0; i < startLength; i++) {
+			AddSegment ();
+		}
 	}
 
 	public void ExertForce(Vector2 force) {
 		body.AddForceAtPosition (Vector2.one * Time.deltaTime * force.x * GetBounds().size.y, new Vector2(0, GetBounds ().size.y));
 	}
 
-	void BuildLadder(){
+	public void AddSegment(){
+		// Determine next position
 		List<GameObject> segments = GetSegments();
 
-		// Do we need a new segment?
-		if (segments.Count >= length)
-			return; // Nope
+		Vector2 segmentPosition = new Vector2 (
+			0,
+			(segmentRenderer.bounds.size.y + segmentMargin) * segments.Count
+		);
 
-		for (int i = 0; i < length - segments.Count; i++) {
-			Vector2 segmentPosition = new Vector2 (
-            	0,
-				segmentRenderer.bounds.size.y * (i + segments.Count)
-			);
-			AddSegment (segmentPosition);
-		}
-	}
-
-	public void AddLength(int amount){
-		length += amount;
-	}
-
-	void AddSegment(Vector3 position){
+		// Create segment
 		GameObject segment = Instantiate (segmentPrefab) as GameObject;
 
 		segment.transform.parent = transform.FindChild ("Segments");
-		segment.transform.localPosition = position;
+		segment.transform.localPosition = segmentPosition;
 		segment.transform.localRotation = Quaternion.identity;
 
 		// Update BoxCollider
@@ -89,10 +76,7 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public float GetHeight(){
-		return segmentRenderer.bounds.size.y * GetSegments ().Count;
+		return (segmentRenderer.bounds.size.y + segmentMargin) * GetSegments ().Count;
 	}
-
-	void Update () {
-		BuildLadder ();
-	}
+		
 }

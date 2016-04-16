@@ -144,7 +144,7 @@ public class Player : MonoBehaviour {
 		ApplyBoundLimits ();
 
 		if (transform.localPosition.y > ladder.GetHeight ()) {
-			ladder.AddLength (1);
+			ladder.AddSegment ();
 		}
 	}
 
