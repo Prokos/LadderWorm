@@ -97,7 +97,7 @@ public class Player : MonoBehaviour {
 		Move (movement, falling);
 
 		if (transform.localPosition.y > ladder.GetHeight ()) {
-			ladder.AddLength (1);
+			ladder.AddSegment ();
 		}
 	}
 
