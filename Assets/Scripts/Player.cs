@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
 	private Bounds ladderBounds;
 
 	private Vector2 maxSpeed = new Vector2 (15f, 30f);
-	private Vector2 maxForce = new Vector2(500f, 500f);
+	private Vector2 maxForce = new Vector2(750f, 500f);
 	//sorta enum and never used ;D
 	private string[] ladderPositionStates     = {"left", "center", "right"};
 	private float[] ladderHorizontalPositions = {-2f, 0f, 2f};
@@ -36,15 +36,10 @@ public class Player : MonoBehaviour {
 			Mathf.Min(m_RigidBody2D.velocity.x, maxSpeed.x),
 			Mathf.Min(m_RigidBody2D.velocity.y, maxSpeed.y)
 		);
-		Debug.Log (m_RigidBody2D.velocity);
+
 		//update the exertingForce
 		//are we on the same side as we are exerting force too
-		if(
-			movement.x < 0 && ladderPositionStateIndex == 1 ||
-			movement.y > 0 && ladderPositionStateIndex == 2
-		) {
-			ladder.ExertForce (transform.localPosition, new Vector2(maxForce.x * movement.x, 0f));
-		}
+		ladder.ExertForce (new Vector2(maxForce.x * movement.x, 0f));
 	}
 
 	private void PotentialReposition() {
