@@ -2,16 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
 public class Ladder : MonoBehaviour {
 	public int startLength;
 	public GameObject segmentPrefab;
 	public SpriteRenderer segmentRenderer;
 	public float segmentMargin = 0f;
+	public Text countString;
 
 	private Rigidbody2D body;
+	private List<GameObject> segments;
 
 	void Awake () {
+		segments = new List<GameObject> ();
 		body = GetComponent<Rigidbody2D> ();
 		segmentRenderer = segmentPrefab.transform.Find ("sprite").GetComponent<SpriteRenderer> ();
 
@@ -21,14 +25,10 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public void ExertForce(Vector2 force) {
-		List<GameObject> segments = GetSegments ();
 		body.AddForceAtPosition (Vector2.one * force.x * GetHeight(), segments.Last().transform.position);
 	}
 
 	public void AddSegment(){
-		// Determine next position
-		List<GameObject> segments = GetSegments();
-
 		Vector2 segmentPosition = new Vector2 (
 			0,
 			(segmentRenderer.bounds.size.y + segmentMargin) * segments.Count
@@ -54,17 +54,13 @@ public class Ladder : MonoBehaviour {
 			0f,
 			boxCollider.size.y * .5f - segmentRenderer.bounds.size.y * .5f
 		);
-	}
 
-	List<GameObject> GetSegments(){
-		List<GameObject> children = new List<GameObject>();
-		foreach (Transform child in transform.FindChild("Segments")){
-			if (child.tag == "LadderSegment"){
-				children.Add(child.gameObject);
-			}
+		segments.Add (segment);
+
+		// Score Counter
+		if(countString != null){
+			countString.text = "Ladders Built:  " + segments.Count;
 		}
-			
-		return children;
 	}
 
 	public Bounds GetBounds(){
@@ -78,7 +74,7 @@ public class Ladder : MonoBehaviour {
 	}
 
 	public float GetHeight(){
-		return (segmentRenderer.bounds.size.y + segmentMargin) * GetSegments ().Count;
+		return (segmentRenderer.bounds.size.y + segmentMargin) * segments.Count;
 	}
 		
 }
