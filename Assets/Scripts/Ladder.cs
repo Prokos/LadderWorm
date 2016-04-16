@@ -43,6 +43,10 @@ public class Ladder : MonoBehaviour {
 		}
 	}
 
+	public void AddLength(int amount){
+		length += amount;
+	}
+
 	void AddSegment(Vector3 position){
 		GameObject segment = Instantiate (segmentPrefab) as GameObject;
 
@@ -63,9 +67,6 @@ public class Ladder : MonoBehaviour {
 			0f,
 			boxCollider.size.y * .5f - segmentRenderer.bounds.size.y * .5f
 		);
-
-		// Set camera follow target to latest segment, for now
-		 Camera.main.GetComponent<SmoothCamera2D>().target = segment.transform;
 	}
 
 	List<GameObject> GetSegments(){
@@ -75,10 +76,11 @@ public class Ladder : MonoBehaviour {
 				children.Add(child.gameObject);
 			}
 		}
+			
 		return children;
 	}
 
-	Bounds GetBounds(){
+	public Bounds GetBounds(){
 		Bounds bounds = new Bounds(transform.position, Vector2.zero);
 
 		foreach(Renderer r in GetComponentsInChildren<SpriteRenderer>()) {
@@ -88,11 +90,11 @@ public class Ladder : MonoBehaviour {
 		return bounds;
 	}
 
-	void Update () {
-		if (Input.GetKey (KeyCode.UpArrow)) {
-			length++;
-		}
+	public float GetHeight(){
+		return segmentRenderer.bounds.size.y * GetSegments ().Count;
+	}
 
+	void Update () {
 		// currentTorque
 		//body.AddTorque (currentTorque * Time.deltaTime);
 
