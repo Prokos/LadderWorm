@@ -57,9 +57,6 @@ public class BackgroundScroller : MonoBehaviour {
 			return;
 		
 		Bounds cameraBounds = Camera.main.GetOrthographicBounds();
-		Bounds spriteBounds = GetBounds ();
-
-		Debug.Log (spriteBounds);
 
 		GameObject mostRightSprite = null;
 		GameObject mostLeftSprite = null;
@@ -75,12 +72,12 @@ public class BackgroundScroller : MonoBehaviour {
 
 		SpriteRenderer spriteRenderer = mostRightSprite.GetComponent<SpriteRenderer>();
 
-		if (cameraBounds.max.x > spriteBounds.max.x) {
+		if (cameraBounds.max.x > mostRightSprite.GetComponent<SpriteRenderer>().bounds.max.x) {
 			mostLeftSprite.transform.localPosition = new Vector2 (
 				mostRightSprite.transform.localPosition.x + spriteRenderer.bounds.size.x,
 				0
 			);
-		} else if (cameraBounds.min.x < spriteBounds.min.x) {
+		} else if (cameraBounds.min.x < mostLeftSprite.GetComponent<SpriteRenderer>().bounds.min.x) {
 			mostRightSprite.transform.localPosition = new Vector2 (
 				mostLeftSprite.transform.localPosition.x - spriteRenderer.bounds.size.x,
 				0
@@ -89,7 +86,7 @@ public class BackgroundScroller : MonoBehaviour {
 	}
 
 	Bounds GetBounds(){
-		Bounds bounds = new Bounds(transform.localPosition, Vector2.zero);
+		Bounds bounds = new Bounds();
 
 		foreach(Renderer r in GetComponentsInChildren<SpriteRenderer>()) {
 			bounds.Encapsulate(r.bounds);
