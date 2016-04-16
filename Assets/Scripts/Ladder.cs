@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Ladder : MonoBehaviour {
 	public int startLength;
 	public GameObject segmentPrefab;
+	public float angle;
 
 	private int length;
 	private Rigidbody2D body;
@@ -14,6 +15,10 @@ public class Ladder : MonoBehaviour {
 		body = GetComponent<Rigidbody2D> ();
 
 		BuildLadder ();
+	}
+
+	public void ExertForce(float yPosition, float horizontalForce) {
+		//nothing yet
 	}
 
 	void BuildLadder(){
