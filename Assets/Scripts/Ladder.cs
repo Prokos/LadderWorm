@@ -7,9 +7,11 @@ public class Ladder : MonoBehaviour {
 	public GameObject segmentPrefab;
 
 	private int length;
+	private Rigidbody2D body;
 
 	void Awake () {
 		length = startLength;
+		body = GetComponent<Rigidbody2D> ();
 
 		BuildLadder ();
 	}
@@ -23,10 +25,9 @@ public class Ladder : MonoBehaviour {
 
 		for (int i = 0; i < length - segments.Count; i++) {
 			SpriteRenderer segmentRenderer = segmentPrefab.transform.Find ("sprite").GetComponent<SpriteRenderer> ();
-			Vector3 segmentPosition = new Vector3 (
+			Vector2 segmentPosition = new Vector2 (
             	0,
-				segmentRenderer.bounds.size.y * (i + segments.Count),
-            	1
+				segmentRenderer.bounds.size.y * (i + segments.Count)
 			);
 
 			AddSegment (segmentPosition);
@@ -60,11 +61,11 @@ public class Ladder : MonoBehaviour {
 		}
 
 		if (Input.GetKey (KeyCode.LeftArrow)) {
-			transform.Rotate(Vector3.forward * 10 * Time.deltaTime);
+			body.AddTorque(10f * Time.deltaTime);
 		}
 
 		if (Input.GetKey (KeyCode.RightArrow)) {
-			transform.Rotate(Vector3.back * 10 * Time.deltaTime);
+			body.AddTorque(-10f * Time.deltaTime);
 		}
 
 		BuildLadder ();
