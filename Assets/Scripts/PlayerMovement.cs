@@ -79,7 +79,7 @@ public class PlayerMovement : MonoBehaviour {
 		Vector2 jointPosition = movementScript.GetPosition ();
 
 		ladderPlacementCooldownCurrent -= Time.fixedDeltaTime;
-		if (ladderPlacementCooldownCurrent < 0 && jointPosition.y > ladder.GetHeight() - 1) {
+		if (ladderPlacementCooldownCurrent < 0 && jointPosition.y > ladder.GetHeight() - 4) {
 			ladder.AddSegment ();
 			ladderPlacementCooldownCurrent = ladderPlacementCooldown;
 		}
