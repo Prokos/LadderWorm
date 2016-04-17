@@ -17,22 +17,29 @@ public class BirdEnemy : MonoBehaviour {
 
 	private int randomBehaviorIndex;
 	private Vector2[] movements = {
-		new Vector2 (1, 1),
-		new Vector2 (1, -1),
-		new Vector2 (-1, 1),
-		new Vector2 (-1, -1)
+		new Vector2 (1f, -0.325f),
+		new Vector2 (1f, -.75f),
+		new Vector2 (-1f, -0.325f),
+		new Vector2 (-1f, -.75f),
+		new Vector2 (1.2f, -.001f),
+		new Vector2 (-1.2f, .001f),
+		new Vector2 (0.05f, 0.5f),
+		new Vector2 (0.08f, .5f),
+		new Vector2 (-0.09f, .5f)
 	};
 	private Vector2[] spawnPointsRelativeToPlayer = {
-		new Vector2 (-10f, -10f),
-		new Vector2 (-10f, 10f),
-		new Vector2 (10f, -10f),
-		new Vector2 (10f, 10f)
+		new Vector2 (-10f, 15f),
+		new Vector2 (-5f, 15f),
+		new Vector2 (5f, 15f),
+		new Vector2 (10f, 15f),
+		new Vector2 (-15f, 5f),
+		new Vector2 (15f, 5f),
+		new Vector2 (4f, 15f),
+		new Vector2 (-5f, 15f),
+		new Vector2 (7f, 15f)
 	};
 
 	//give the enemy some time to be removed it might pop back in frame
-	private Coroutine removeWithWait;
-	private int framesTillRemoved = 300;
-	private bool isRemoving = false;
 	private SpriteRenderer spriteRenderer;
 
 	public GameObject playerObject;
@@ -51,7 +58,7 @@ public class BirdEnemy : MonoBehaviour {
 	}
 
 	public virtual void DetermineRelativeMovementPosition() {
-		relativeMovementPosition = transform.TransformPoint (0,0,0);
+		//relativeMovementPosition = transform.TransformPoint (0,0,0);
 	}
 
 	public virtual void DetermineSpawnPoint() {
@@ -80,33 +87,9 @@ public class BirdEnemy : MonoBehaviour {
 		);
 	}
 
-	IEnumerator RemoveWithWait() {
-		yield return new WaitUntil(() => framesTillRemoved == 0);
-		Remove ();
-	}
-
-	void Remove() {
-		Destroy (gameObject);
-		Destroy (this);
-	}
-
-	void OnTriggerEnter(Collider other)
-	{
-		if(other.gameObject.tag == "Player")
-		{
-			if (removeWithWait != null)
-				StopCoroutine (removeWithWait);
-			
-			Destroy(gameObject);
-			Destroy (this);
-		}
-	}
 
 	// Update is called once per frame
 	void Update () {
-		if (isRemoving) {
-			framesTillRemoved--;
-		}
 		UpdateRelativeMovementPosition ();
 		Move ();
 	}

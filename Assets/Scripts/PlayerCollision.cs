@@ -14,7 +14,6 @@ public class PlayerCollision : MonoBehaviour {
 	}
 
 	public void Collision(Collider2D other) {
-		Debug.Log (other.gameObject.tag);
 		if (other.tag == "Enemy") {
 			//dirty dirty game over
 			Application.LoadLevel (Application.loadedLevel);

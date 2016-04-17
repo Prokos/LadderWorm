@@ -4,23 +4,31 @@ using System.Collections;
 public class EnemyManager : MonoBehaviour
 {
 	public GameObject birdEnemyPrefab;     // The enemy prefab to be spawned.
-	public float spawnTime = 1f;    // How long between each spawn.
+	public float spawnTime;    // How long between each spawn.
+	public float randomAddonTime;
+
+	private bool IsSpawning = true;
 
 	public GameObject playerObject;
 
 
 	void Start ()
 	{
-		// Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.
-		InvokeRepeating ("Spawn", 0, 1);
+		// First spawn is double the spawn time delayed + random
+		Invoke ("Spawn", spawnTime * 2 + Random.value * randomAddonTime);
 	}
 
 
 	void Spawn ()
 	{
-		// Create an instance of the enemy prefab at the randomly selected spawn point's position and rotation.
-		GameObject tmpBirdEnemy = Instantiate (birdEnemyPrefab) as GameObject;
-		tmpBirdEnemy.GetComponent<BirdEnemy>().playerObject = playerObject;
+		if (IsSpawning) {
+			// Create an instance of the enemy prefab at the randomly selected spawn point's position and rotation.
+			GameObject tmpBirdEnemy = Instantiate (birdEnemyPrefab) as GameObject;
+			tmpBirdEnemy.GetComponent<BirdEnemy> ().playerObject = playerObject;
+
+			//regular respawn
+			Invoke ("Spawn", spawnTime + Random.value * randomAddonTime);
+		}
 
 	}
 }

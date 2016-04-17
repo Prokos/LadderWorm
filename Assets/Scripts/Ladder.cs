@@ -46,7 +46,6 @@ public class Ladder : MonoBehaviour {
 
 		// Update BoxCollider
 		BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
-		Bounds ladderBounds = GetBounds ();
 
 		boxCollider.size = new Vector2 (
 			segmentRenderer.bounds.size.x,
