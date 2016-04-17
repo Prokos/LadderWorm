@@ -33,6 +33,7 @@ public class BirdEnemy : MonoBehaviour {
 	private Coroutine removeWithWait;
 	private int framesTillRemoved = 300;
 	private bool isRemoving = false;
+	private SpriteRenderer spriteRenderer;
 
 	public GameObject playerObject;
 
@@ -40,6 +41,13 @@ public class BirdEnemy : MonoBehaviour {
 	void Start() {
 		DetermineRelativeMovementPosition();
 		DetermineSpawnPoint ();
+		if (movements [randomBehaviorIndex].x < 0) {
+			spriteRenderer = GetComponentInChildren<SpriteRenderer> ();
+			spriteRenderer.transform.localScale = new Vector2 (
+				spriteRenderer.transform.localScale.x * -1,
+				spriteRenderer.transform.localScale.y
+			);
+		}
 	}
 
 	public virtual void DetermineRelativeMovementPosition() {
