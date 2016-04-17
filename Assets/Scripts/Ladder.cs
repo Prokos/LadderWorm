@@ -60,7 +60,7 @@ public class Ladder : MonoBehaviour {
 
 		// Score Counter
 		if(countString != null){
-			countString.text = "Ladders Built:  " + segments.Count;
+			countString.text = string.Format("{0:0,0}", segments.Count);
 		}
 	}
 
