@@ -2,13 +2,16 @@ version: 2
 importPivots: 1
 tpsheetFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.tpsheet
-- Assets/Sprites/sheets/birdperson.tpsheet
 - Assets/Sprites/sheets/snakeperson.tpsheet
+- Assets/Sprites/sheets/birdperson.tpsheet
+- Assets/Sprites/sheets/character-climbing.tpsheet
 textureFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites.png
-- Assets/Sprites/sheets/birdperson.png
 - Assets/Sprites/sheets/snakeperson.png
+- Assets/Sprites/sheets/birdperson.png
+- Assets/Sprites/sheets/character-climbing.png
 normalmapFileNames:
 - Assets/codeandweb.com/Example/SpriteSheet/sprites_n.png
+- 
 - 
 - 
