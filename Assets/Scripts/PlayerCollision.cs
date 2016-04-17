@@ -5,18 +5,30 @@ using System.Collections;
 public class PlayerCollision : MonoBehaviour {
 
 	// Use this for initialization
+
+	public float gameOverTime = 1.5f;
+	private float gameOverTimeCurrent = 0;
+	private bool timerRunning = false;
+
 	void Start () {
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+		if (timerRunning == true) {
+			gameOverTimeCurrent += Time.deltaTime;
+			if (gameOverTimeCurrent > gameOverTime) {
+				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+			}
+		}
 	}
 
-	public void Collision(Collider2D other) {
+	public void Collision(PlayerHit objectHit, Collider2D other) {
 		if (other.tag == "Enemy") {
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+			objectHit.GetComponent<Collider2D> ().enabled = false;
+			timerRunning = true;
+			this.GetComponent<PlayerMovement> ().canMove = false;
 		}
 	}
 }

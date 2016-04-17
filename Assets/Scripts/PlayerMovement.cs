@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour {
 
 	private bool OnLadder = true;
 
+	[UnityEngine.HideInInspector]
+	public bool canMove = true;
+
 	void Start() {
 		movementScript = this.GetComponent<MovementAlongLadder> ();
 	}
@@ -66,6 +69,9 @@ public class PlayerMovement : MonoBehaviour {
 				movement += Vector2.right;
 			}
 			
+		}
+		if (canMove == false) {
+			movement = new Vector2 ();
 		}
 
 		movementScript.Move (movement, Time.fixedDeltaTime);
