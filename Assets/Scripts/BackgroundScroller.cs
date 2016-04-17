@@ -14,7 +14,7 @@ public class BackgroundScroller : MonoBehaviour {
 	void Start(){
 		startPosition = new Vector2 (
 			0,
-			Camera.main.transform.localPosition.y - Camera.main.orthographicSize
+			Camera.main.transform.localPosition.y - Camera.main.orthographicSize - sprites.First().bounds.size.y * -.5f - 1f //buffer for player
 		);
 
 		FillPool ();
@@ -45,7 +45,7 @@ public class BackgroundScroller : MonoBehaviour {
 
 					// Position the sprite next to the last one in the pool
 					spriteObject.transform.localPosition = new Vector2 (
-						spawnPosition.x - (spriteRenderer.bounds.size.x * .5f * (poolSize.x - 1)) + spriteRenderer.bounds.size.x * i,
+						spawnPosition.x - (sprite.bounds.size.x * .5f * (poolSize.x - 1)) + sprite.bounds.size.x * i,
 						spawnPosition.y
 					);
 
@@ -54,7 +54,7 @@ public class BackgroundScroller : MonoBehaviour {
 					if (i == poolSize.x - 1) {
 						spawnPosition = new Vector2 (
 							spawnPosition.x,
-							spawnPosition.y + spriteRenderer.bounds.size.y 
+							spawnPosition.y + sprite.bounds.size.y
 						);
 					}
 				}
