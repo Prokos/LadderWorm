@@ -27,9 +27,7 @@ public class Ladder : MonoBehaviour {
 	public void ExertForce(Vector2 force) {
 		body.AddForceAtPosition (Vector2.right * force.x * GetHeight(), segments.Last().transform.position);
 	}
-
-
-
+		
 	public void AddSegment()
 	{
 		Vector2 segmentPosition = new Vector2 (
@@ -59,8 +57,6 @@ public class Ladder : MonoBehaviour {
 			0f,
 			boxCollider.size.y * .5f - segmentRenderer.bounds.size.y * .5f
 		);
-
-		segments.Add (segment);
 
 		// Score Counter
 		if(countString != null){
