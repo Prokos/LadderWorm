@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PlayerCollision : MonoBehaviour {
@@ -15,8 +16,7 @@ public class PlayerCollision : MonoBehaviour {
 
 	public void Collision(Collider2D other) {
 		if (other.tag == "Enemy") {
-			//dirty dirty game over
-			Application.LoadLevel (Application.loadedLevel);
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		}
 	}
 }
