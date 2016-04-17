@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour {
 	void FixedUpdate() {
 		Vector2 movement = Vector2.zero;
 
-		float percentageOffLadder = getPercentageOffLadder ();
+		float percentageOffLadder = GetPercentageOffLadder ();
 
 		if (Mathf.Abs (percentageOffLadder) > movementDeadZonePercentage) {
 			OnLadder = false;
@@ -84,7 +84,7 @@ public class PlayerMovement : MonoBehaviour {
 			ladderPlacementCooldownCurrent = ladderPlacementCooldown;
 		}
 
-		percentageOffLadder = getPercentageOffLadder ();
+		percentageOffLadder = GetPercentageOffLadder ();
 		if (Mathf.Abs (percentageOffLadder) <= forceDeadZonePercentage) {
 			percentageOffLadder = 0;
 		}
@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	}
 
-	float getPercentageOffLadder() {
+	float GetPercentageOffLadder() {
 		return movementScript.GetPosition ().x / movementScript.anchorX.max;
 	}
 
