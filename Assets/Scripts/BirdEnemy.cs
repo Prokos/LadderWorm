@@ -6,6 +6,9 @@ public class BirdEnemy : Enemy {
 	
 	public float speed = 0;
 
+	public float lifeDuration = 20;
+	private float lifeDurationCurrent = 0;
+
 	public GameObject playerObject;
 	private GameObject sprite;
 
@@ -29,6 +32,11 @@ public class BirdEnemy : Enemy {
 	// Update is called once per frame
 	void Update () {
 		transform.Translate (new Vector3 (0, speed * Time.deltaTime, 0), Space.Self);
+
+		lifeDurationCurrent += Time.deltaTime;
+		if (lifeDurationCurrent > lifeDuration) {
+			Destroy (gameObject);
+		}
 	}
 
 

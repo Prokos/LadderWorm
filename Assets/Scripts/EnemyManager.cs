@@ -7,6 +7,7 @@ public class EnemyManager : MonoBehaviour
 	public GameObject ladderObject;
 
 	public EnemySpawnTimer birds;
+	public EnemySpawnTimer snakes;
 
 	void Update() {
 		birds.UpdateTimer (Time.deltaTime, (spawner) => {
@@ -16,7 +17,7 @@ public class EnemyManager : MonoBehaviour
 			var enemyScript = enemy.GetComponent<BirdEnemy>();
 			enemyScript.playerObject = playerObject;
 
-			float randomAngle = Random.Range(-40, 30) + 90;
+			float randomAngle = Random.Range(-30, 20) + 90;
 			if (Random.value < 0.5) randomAngle += 180;
 
 			Vector3 angles = enemyScript.transform.eulerAngles;
@@ -32,6 +33,14 @@ public class EnemyManager : MonoBehaviour
 
 			float speed = Random.Range(8, 15);
 			enemyScript.speed = speed;
+		});
+
+		snakes.UpdateTimer (Time.deltaTime, (spawner) => {
+			Vector3 position = playerObject.transform.position;
+			var enemy = Instantiate(spawner.enemies[0], new Vector3(), Quaternion.identity) as GameObject;
+
+			var enemyScript = enemy.GetComponent<SnakeEnemy>();
+			enemyScript.Connect(playerObject, ladderObject, position);
 		});
 	}
 

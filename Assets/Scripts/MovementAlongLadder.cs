@@ -9,11 +9,14 @@ public class MovementAlongLadder : MonoBehaviour {
 	public ForceFloat anchorX;
 	public ForceFloat anchorY;
 
+	public bool debug = false;
+
 	private FixedJoint2D attachedJoint;
 
 	void Start () {
 		attachedJoint = this.GetComponent <FixedJoint2D> ();
 		attachedJoint.connectedBody = ladder.GetComponent<Rigidbody2D>();
+
 		anchorX.Start ();
 		anchorY.Start ();
 	}

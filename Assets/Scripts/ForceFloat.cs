@@ -17,6 +17,8 @@ public class ForceFloat {
 	public float decelerationMultiplicative = 0.999f;
 	public float acceleration = 0.5f;
 
+	public bool debug = false;
+
 	public void Start() {
 		value = initialValue;
 	}
@@ -55,5 +57,11 @@ public class ForceFloat {
 				speed = 0;
 			}
 		}
+	}
+
+	public void SetValuesExplicitly(float newValue, float newSpeed) {
+		value = newValue;
+		speed = newSpeed;
+		this.initialValue = newValue;
 	}
 }
