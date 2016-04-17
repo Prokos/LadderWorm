@@ -60,7 +60,7 @@ public class Ladder : MonoBehaviour {
 
 		// Score Counter
 		if(countText != null){
-			countText.text = segments.Count + "m";
+			countText.text = segments.Count + "M";
 		}
 	}
 
