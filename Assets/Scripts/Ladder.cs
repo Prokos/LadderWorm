@@ -9,7 +9,7 @@ public class Ladder : MonoBehaviour {
 	public GameObject segmentPrefab;
 	public SpriteRenderer segmentRenderer;
 	public float segmentMargin = 0f;
-	public Text countString;
+	public Text countText;
 
 	private Rigidbody2D body;
 
@@ -27,9 +27,7 @@ public class Ladder : MonoBehaviour {
 	public void ExertForce(Vector2 force) {
 		body.AddForceAtPosition (Vector2.right * force.x * GetHeight(), segments.Last().transform.position);
 	}
-
-
-
+		
 	public void AddSegment()
 	{
 		Vector2 segmentPosition = new Vector2 (
@@ -60,11 +58,9 @@ public class Ladder : MonoBehaviour {
 			boxCollider.size.y * .5f - segmentRenderer.bounds.size.y * .5f
 		);
 
-		segments.Add (segment);
-
 		// Score Counter
-		if(countString != null){
-			countString.text = "Ladders Built:  " + segments.Count;
+		if(countText != null){
+			countText.text = string.Format("{0:0,0}", segments.Count);
 		}
 	}
 
