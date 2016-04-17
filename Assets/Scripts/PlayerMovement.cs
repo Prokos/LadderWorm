@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour {
 	private float ladderPlacementCooldownCurrent = 0;
 	private MovementAlongLadder movementScript;
 
+	private bool OnLadder = true;
+
 	void Start() {
 		movementScript = this.GetComponent<MovementAlongLadder> ();
 	}
@@ -21,26 +23,54 @@ public class PlayerMovement : MonoBehaviour {
 	void FixedUpdate() {
 		Vector2 movement = Vector2.zero;
 
-		if (Input.GetKey (KeyCode.UpArrow)) {
-			movement += Vector2.up;
-		}
-		if (Input.GetKey (KeyCode.DownArrow)) {
-			movement += Vector2.down;
-		}
-		if (Input.GetKey (KeyCode.LeftArrow)) {
-			movement += Vector2.left;
-		}
-		if (Input.GetKey (KeyCode.RightArrow)) {
-			movement += Vector2.right;
+		float percentageOffLadder = getPercentageOffLadder ();
+
+		if (Mathf.Abs (percentageOffLadder) > movementDeadZonePercentage) {
+			OnLadder = false;
+		} else if(Mathf.Abs (percentageOffLadder) < movementDeadZonePercentage) {
+			OnLadder = true;
 		}
 
-		float percentageOffLadder = getPercentageOffLadder ();
-		/*
-		if (movement.y != 0 && Mathf.Abs (percentageOffLadder) > movementDeadZonePercentage) {
-			movement.y = 0;
-			movementScript.anchorX.SetValuesExplicitly (movementScript.anchorX.value, 0);
+		if (OnLadder) {
+			
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				movement += Vector2.down;
+			}
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				movement += Vector2.up;
+			}
+			if (Input.GetKey (KeyCode.LeftArrow)) {
+				movement += new Vector2(-0.5f, 0);
+			}
+			if (Input.GetKey (KeyCode.RightArrow)) {
+				movement += new Vector2 (0.5f, 0);
+			}
+
+		} else {
+			bool verticalInput = false;
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				movement += Vector2.down;
+				verticalInput = true;
+			}
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				movement += Vector2.up;
+				verticalInput = true;
+			}
+			if(verticalInput) {
+				if (percentageOffLadder < movementDeadZonePercentage) {
+					movement += Vector2.right;
+				} else if (percentageOffLadder > movementDeadZonePercentage) {
+					movement += Vector2.left;
+				}
+			}
+
+			if (Input.GetKey (KeyCode.LeftArrow)) {
+				movement += new Vector2(-0.5f, 0);
+			}
+			if (Input.GetKey (KeyCode.RightArrow)) {
+				movement += new Vector2 (0.5f, 0);
+			}
 		}
-		*/
 
 		movementScript.Move (movement, Time.fixedDeltaTime);
 
