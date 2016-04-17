@@ -40,10 +40,10 @@ public class PlayerMovement : MonoBehaviour {
 				movement += Vector2.up;
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				movement += new Vector2(-0.5f, 0);
+				movement += new Vector2(-1f, 0);
 			}
 			if (Input.GetKey (KeyCode.RightArrow)) {
-				movement += new Vector2 (0.5f, 0);
+				movement += new Vector2 (1f, 0);
 			}
 
 		} else {
@@ -65,10 +65,10 @@ public class PlayerMovement : MonoBehaviour {
 			}
 
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				movement += new Vector2(-0.5f, 0);
+				movement += new Vector2(-1f, 0);
 			}
 			if (Input.GetKey (KeyCode.RightArrow)) {
-				movement += new Vector2 (0.5f, 0);
+				movement += new Vector2 (1f, 0);
 			}
 		}
 

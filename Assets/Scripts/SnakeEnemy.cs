@@ -18,11 +18,11 @@ public class SnakeEnemy : MonoBehaviour {
 
 		float startX;
 		float random = Random.value;
-		if (random < 0.33f) {
+		if (random < 0.5f) {
 			startX = movementScript.anchorX.min;
-		} else if (random < 0.66f) {
+		} /*else if (random < 0.66f) {
 			startX = 0;
-		} else {
+		} */else {
 			startX = movementScript.anchorX.max;
 		}
 		Vector3 eulerAngles = sprite.transform.localEulerAngles;
