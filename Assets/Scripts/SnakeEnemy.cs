@@ -8,23 +8,29 @@ public class SnakeEnemy : MonoBehaviour {
 	private MovementAlongLadder movementScript;
 	private GameObject sprite;
 
+	public enum LaneSpawnBehaviour { OnlyMiddle, OnlySides }
+	public LaneSpawnBehaviour spawnBehaviour;
+
 	public void Connect(GameObject playerObject, GameObject ladderObject, Vector3 position) {
 		sprite = transform.GetChild (0).gameObject;
 
 		this.movementScript = this.GetComponent<MovementAlongLadder> ();
-		//this.movementScript.debug = true;
 		this.movementScript.ladder = ladderObject.GetComponent<Ladder>();
-		//this.movementScript.anchorX.debug = true;
 
 		float startX;
 		float random = Random.value;
-		if (random < 0.5f) {
-			startX = movementScript.anchorX.min;
-		} /*else if (random < 0.66f) {
+		if (spawnBehaviour == LaneSpawnBehaviour.OnlySides) {
+			if (random < 0.5f) {
+				startX = movementScript.anchorX.min;
+			} else {
+				startX = movementScript.anchorX.max;
+			}
+		} else if (spawnBehaviour == LaneSpawnBehaviour.OnlyMiddle) {
 			startX = 0;
-		} */else {
-			startX = movementScript.anchorX.max;
+		} else {
+			startX = 0;
 		}
+
 		Vector3 eulerAngles = sprite.transform.localEulerAngles;
 		eulerAngles.z = 0;
 		sprite.transform.localEulerAngles = eulerAngles;
