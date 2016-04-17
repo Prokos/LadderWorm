@@ -1,0 +1,12 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: birdperson.png (1024 x 1024)
+# $TexturePacker:SmartUpdate:242d2e4b538c7bfbed91ebb176daba54:59e373d566ac651b9cc392cb6cc9ed1c:b9ee70bee7fd5ede3f11d159bf3368f3$
+#
+
+bird-1;2;690;586;332;0.5;0.5
+bird-2;2;319;515;369;0.5;0.5
