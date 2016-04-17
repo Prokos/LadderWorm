@@ -9,7 +9,7 @@ public class Ladder : MonoBehaviour {
 	public GameObject segmentPrefab;
 	public SpriteRenderer segmentRenderer;
 	public float segmentMargin = 0f;
-	public Text countString;
+	public Text countText;
 
 	private Rigidbody2D body;
 
@@ -59,8 +59,8 @@ public class Ladder : MonoBehaviour {
 		);
 
 		// Score Counter
-		if(countString != null){
-			countString.text = string.Format("{0:0,0}", segments.Count);
+		if(countText != null){
+			countText.text = string.Format("{0:0,0}", segments.Count);
 		}
 	}
 
