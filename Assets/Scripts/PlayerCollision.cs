@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerCollision : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class PlayerCollision : MonoBehaviour {
 	public float gameOverTime = 1.5f;
 	private float gameOverTimeCurrent = 0;
 	private bool timerRunning = false;
+
+	public Text gameOverText;
 
 	void Start () {
 	
