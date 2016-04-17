@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	public float sidewaysForce = 2;
 	public float forceDeadZonePercentage = 0.5F;
+	public float movementDeadZonePercentage = 0.5F;
 
 	public float ladderPlacementCooldown = 0.2f;
 	private float ladderPlacementCooldownCurrent = 0;
@@ -26,14 +27,20 @@ public class PlayerMovement : MonoBehaviour {
 		if (Input.GetKey (KeyCode.DownArrow)) {
 			movement += Vector2.down;
 		}
-
-
 		if (Input.GetKey (KeyCode.LeftArrow)) {
 			movement += Vector2.left;
 		}
 		if (Input.GetKey (KeyCode.RightArrow)) {
 			movement += Vector2.right;
 		}
+
+		float percentageOffLadder = getPercentageOffLadder ();
+		/*
+		if (movement.y != 0 && Mathf.Abs (percentageOffLadder) > movementDeadZonePercentage) {
+			movement.y = 0;
+			movementScript.anchorX.SetValuesExplicitly (movementScript.anchorX.value, 0);
+		}
+		*/
 
 		movementScript.Move (movement, Time.fixedDeltaTime);
 
@@ -45,7 +52,7 @@ public class PlayerMovement : MonoBehaviour {
 			ladderPlacementCooldownCurrent = ladderPlacementCooldown;
 		}
 
-		float percentageOffLadder = jointPosition.x / movementScript.anchorX.max;
+		percentageOffLadder = getPercentageOffLadder ();
 		if (Mathf.Abs (percentageOffLadder) <= forceDeadZonePercentage) {
 			percentageOffLadder = 0;
 		}
@@ -56,4 +63,9 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 	}
+
+	float getPercentageOffLadder() {
+		return movementScript.GetPosition ().x / movementScript.anchorX.max;
+	}
+
 }
