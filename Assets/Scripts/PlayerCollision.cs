@@ -22,6 +22,7 @@ public class PlayerCollision : MonoBehaviour {
 		if (timerRunning == true) {
 			gameOverTimeCurrent += Time.deltaTime;
 			if (gameOverTimeCurrent > gameOverTime) {
+				gameOverText.gameObject.SetActive (false);
 				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 			}
 		}
@@ -32,6 +33,7 @@ public class PlayerCollision : MonoBehaviour {
 			objectHit.GetComponent<Collider2D> ().enabled = false;
 			timerRunning = true;
 			this.GetComponent<PlayerMovement> ().canMove = false;
+			gameOverText.gameObject.SetActive (true);
 		}
 	}
 }

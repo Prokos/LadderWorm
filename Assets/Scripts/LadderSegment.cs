@@ -9,7 +9,7 @@ public class LadderSegment : MonoBehaviour {
 			transform.localPosition = new Vector3 (
 				transform.localPosition.x,
 				transform.localPosition.y,
-				Mathf.Lerp(10, -9, Camera.main.WorldToViewportPoint(transform.position).y)
+				Mathf.Lerp(10, 5, Camera.main.WorldToViewportPoint(transform.position).y)
 			);
 //		}
 	}
