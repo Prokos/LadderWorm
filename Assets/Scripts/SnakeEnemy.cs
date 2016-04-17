@@ -32,14 +32,22 @@ public class SnakeEnemy : MonoBehaviour {
 		}
 
 		Vector3 eulerAngles = sprite.transform.localEulerAngles;
-		eulerAngles.z = 0;
-		sprite.transform.localEulerAngles = eulerAngles;
-		if (startX < 0) {
-			Vector3 newScale = sprite.transform.localScale;
-			newScale.x *= -1;
-			sprite.transform.localScale = newScale;
+
+		if (spawnBehaviour == LaneSpawnBehaviour.OnlySides) {
+			if (startX < 0) {
+				Vector3 newScale = sprite.transform.localScale;
+				newScale.x *= -1;
+				sprite.transform.localScale = newScale;
+				eulerAngles.z = 90;
+			} else {
+				eulerAngles.z = -90;
+			}
+		}else{
+			eulerAngles.z = 0;
 		}
-			
+
+		sprite.transform.localEulerAngles = eulerAngles;
+
 		this.movementScript.anchorX.SetValuesExplicitly (startX, 0);
 		this.movementScript.anchorY.SetValuesExplicitly (transform.localPosition.y - 20, 0);
 	}

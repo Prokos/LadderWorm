@@ -1,0 +1,12 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: spiderperson.png (512 x 1024)
+# $TexturePacker:SmartUpdate:ae9615f73d8655c2ad79cad9c0f5097a:63d6ab9c25be0af77c8f5768915b78f3:c7e28332390a87669b82bf3f14c0f8fd$
+#
+
+spider-1;2;122;446;478;0.5;0.5
+spider-2;2;602;505;420;0.5;0.5
