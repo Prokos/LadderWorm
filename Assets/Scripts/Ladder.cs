@@ -30,9 +30,10 @@ public class Ladder : MonoBehaviour {
 		
 	public void AddSegment()
 	{
-		Vector2 segmentPosition = new Vector2 (
+		Vector3 segmentPosition = new Vector3 (
 			0,
-			(segmentRenderer.bounds.size.y + segmentMargin) * segments.Count
+			(segmentRenderer.bounds.size.y + segmentMargin) * segments.Count,
+			- segments.Count / 1000000
 		);
 
 		// Create segment
