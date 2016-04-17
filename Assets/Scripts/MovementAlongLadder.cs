@@ -19,14 +19,15 @@ public class MovementAlongLadder : MonoBehaviour {
 	}
 
 	public void Move(Vector2 normalisedAcceleration, float timeframe) {
+		anchorY.max = ladder.GetHeight ();
 		if (normalisedAcceleration.x != 0) {
-			anchorX.Accerelate (Time.fixedDeltaTime, normalisedAcceleration.x);
+			anchorX.Accerelate (timeframe, normalisedAcceleration.x);
 		}
 		if (normalisedAcceleration.y != 0) {
-			anchorY.Accerelate (Time.fixedDeltaTime, normalisedAcceleration.y);
+			anchorY.Accerelate (timeframe, normalisedAcceleration.y);
 		}
-		anchorX.DecelerateAndUpdate (Time.fixedDeltaTime);
-		anchorY.DecelerateAndUpdate (Time.fixedDeltaTime);
+		anchorX.DecelerateAndUpdate (timeframe);
+		anchorY.DecelerateAndUpdate (timeframe);
 
 		float newX = anchorX.value;	
 		float newY = anchorY.value;	

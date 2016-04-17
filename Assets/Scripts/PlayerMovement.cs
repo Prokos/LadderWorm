@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour {
 	public float sidewaysForce = 2;
 	public float forceDeadZonePercentage = 0.5F;
 
+	public float ladderPlacementCooldown = 0.2f;
+	private float ladderPlacementCooldownCurrent = 0;
 	private MovementAlongLadder movementScript;
 
 	void Start() {
@@ -37,8 +39,10 @@ public class PlayerMovement : MonoBehaviour {
 
 		Vector2 jointPosition = movementScript.GetPosition ();
 
-		if (jointPosition.y > ladder.GetHeight() - 3) {
+		ladderPlacementCooldownCurrent -= Time.fixedDeltaTime;
+		if (ladderPlacementCooldownCurrent < 0 && jointPosition.y > ladder.GetHeight() - 1) {
 			ladder.AddSegment ();
+			ladderPlacementCooldownCurrent = ladderPlacementCooldown;
 		}
 
 		float percentageOffLadder = jointPosition.x / movementScript.anchorX.max;
