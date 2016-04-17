@@ -8,6 +8,7 @@ public class EnemyManager : MonoBehaviour
 
 	public EnemySpawnTimer birds;
 	public EnemySpawnTimer snakes;
+	public EnemySpawnTimer spiders;
 
 	void Update() {
 		birds.UpdateTimer (Time.deltaTime, (spawner) => {
@@ -36,6 +37,13 @@ public class EnemyManager : MonoBehaviour
 		});
 
 		snakes.UpdateTimer (Time.deltaTime, (spawner) => {
+			Vector3 position = playerObject.transform.position;
+			var enemy = Instantiate(spawner.enemies[0], new Vector3(), Quaternion.identity) as GameObject;
+
+			var enemyScript = enemy.GetComponent<SnakeEnemy>();
+			enemyScript.Connect(playerObject, ladderObject, position);
+		});
+		spiders.UpdateTimer (Time.deltaTime, (spawner) => {
 			Vector3 position = playerObject.transform.position;
 			var enemy = Instantiate(spawner.enemies[0], new Vector3(), Quaternion.identity) as GameObject;
 
