@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public class BirdEnemy : MonoBehaviour {
+public class BirdEnemy : Enemy {
 
 	//the point from where the enemies move
 	//probably defaults to world but some enemies will have the ladder or player as a relative movement position
@@ -46,6 +46,7 @@ public class BirdEnemy : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
+		return;
 		DetermineRelativeMovementPosition();
 		DetermineSpawnPoint ();
 		if (movements [randomBehaviorIndex].x < 0) {
@@ -90,6 +91,7 @@ public class BirdEnemy : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		return;
 		UpdateRelativeMovementPosition ();
 		Move ();
 	}

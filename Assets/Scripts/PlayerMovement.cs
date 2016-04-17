@@ -1,24 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof(FixedJoint2D))]
+[RequireComponent (typeof(MovementAlongLadder))]
 public class PlayerMovement : MonoBehaviour {
 
 	public Ladder ladder;
 
-
 	public float sidewaysForce = 2;
 	public float forceDeadZonePercentage = 0.5F;
 
-	public ForceFloat anchorX;
-	public ForceFloat anchorY;
+	private MovementAlongLadder movementScript;
 
-	private FixedJoint2D attachedJoint;
-
-	void Start () {
-		attachedJoint = this.GetComponent <FixedJoint2D> ();
-		anchorX.Start ();
-		anchorY.Start ();
+	void Start() {
+		movementScript = this.GetComponent<MovementAlongLadder> ();
 	}
 
 	void FixedUpdate() {
@@ -39,25 +33,15 @@ public class PlayerMovement : MonoBehaviour {
 			movement += Vector2.right;
 		}
 
-		if (movement.x != 0) {
-			anchorX.Accerelate (Time.fixedDeltaTime, movement.x);
-		}
-		if (movement.y != 0) {
-			anchorY.Accerelate (Time.fixedDeltaTime, movement.y);
-		}
-		anchorX.DecelerateAndUpdate (Time.fixedDeltaTime);
-		anchorY.DecelerateAndUpdate (Time.fixedDeltaTime);
+		movementScript.Move (movement, Time.fixedDeltaTime);
 
-		float newX = anchorX.value;	
-		float newY = anchorY.value;	
+		Vector2 jointPosition = movementScript.GetPosition ();
 
-		attachedJoint.connectedAnchor = new Vector2 (newX, newY);
-
-		if (attachedJoint.connectedAnchor.y > ladder.GetHeight() - 3) {
+		if (jointPosition.y > ladder.GetHeight() - 3) {
 			ladder.AddSegment ();
 		}
 
-		float percentageOffLadder = attachedJoint.connectedAnchor.x / anchorX.max;
+		float percentageOffLadder = jointPosition.x / movementScript.anchorX.max;
 		if (Mathf.Abs (percentageOffLadder) <= forceDeadZonePercentage) {
 			percentageOffLadder = 0;
 		}

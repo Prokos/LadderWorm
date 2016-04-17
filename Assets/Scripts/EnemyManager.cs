@@ -3,22 +3,22 @@ using System.Collections;
 
 public class EnemyManager : MonoBehaviour
 {
-	public GameObject birdEnemyPrefab;     // The enemy prefab to be spawned.
-	public float spawnTime;    // How long between each spawn.
-	public float randomAddonTime;
-
-	private bool IsSpawning = true;
-
 	public GameObject playerObject;
+	public GameObject ladderObject;
 
+	public EnemySpawnTimer birds;
 
-	void Start ()
-	{
-		// First spawn is double the spawn time delayed + random
-		Invoke ("Spawn", spawnTime * 2 + Random.value * randomAddonTime);
+	void Update() {
+		birds.UpdateTimer (Time.deltaTime, (spawner) => {
+			Vector3 position = playerObject.transform.position + new Vector3(15,0,0);
+			GameObject enemy = Instantiate(spawner.enemies[0], position, Quaternion.identity) as GameObject;
+
+			enemy.GetComponent<BirdEnemy> ().playerObject = playerObject;
+			// Determine position and rotation
+		});
 	}
 
-
+	/*
 	void Spawn ()
 	{
 		if (IsSpawning) {
@@ -29,6 +29,6 @@ public class EnemyManager : MonoBehaviour
 			//regular respawn
 			Invoke ("Spawn", spawnTime + Random.value * randomAddonTime);
 		}
-
 	}
+	*/
 }
